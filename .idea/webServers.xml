@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="44314d5e-94a7-4366-87f4-207d7c5e8ddc" name="AttInMVS">
+        <fileTransfer rootFolder="/home/gongshuai/pycharmProject/AttInMVS" accessType="SFTP" host="218.199.68.177" port="22" sshConfigId="1a78add7-ae13-4fd5-be6e-663ec84fa80b" sshConfig="gongshuai@218.199.68.177:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
