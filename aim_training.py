@@ -15,7 +15,7 @@ from pathlib import Path
 
 def get_args():
     parser = argparse.ArgumentParser('AIM training', add_help=False)
-    parser.add_argument('--batch_size', default=2, type=int)
+    parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--epochs', default=300, type=int)
     parser.add_argument('--output_dir', default='', help='path where to save, empty for no saving')
     parser.add_argument('--save_ckpt_freq', default=20, type=int)

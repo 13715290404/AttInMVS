@@ -269,7 +269,7 @@ def aim_base_patch16_224(pretrained=False, **kwargs):
         patch_size=(16, 16),
         input_channels=3,
         embed_dim=768,
-        block_nums=12,
+        block_nums=8,
         mlp_scale=4.,
         qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
