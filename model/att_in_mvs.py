@@ -273,6 +273,7 @@ def aim_base_patch16_224(pretrained=False, **kwargs):
         mlp_scale=4.,
         qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        use_learnable_pos_emb=True,
         **kwargs
     )
     if pretrained:

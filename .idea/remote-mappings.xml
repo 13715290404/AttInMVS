@@ -10,6 +10,13 @@
             </list>
           </settings>
         </remote-mappings>
+        <remote-mappings server-id="python@sftp://gongshuai@218.199.68.177:22/home/gongshuai/miniconda3/envs/py3.8_tf/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/gongshuai/pycharmProject/AttInMVS" />
+            </list>
+          </settings>
+        </remote-mappings>
       </list>
     </list>
   </component>
