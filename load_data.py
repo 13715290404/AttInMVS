@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import random
 import torch
+from model.base_component import DataAugmentationForAttInMVS
 
 
 def generate_data_path(data_folder_path: str, state='train', multi_views=3):
@@ -139,6 +140,7 @@ def load_pfm(pfm_file):
 
 
 def load_dataset(data_path, multi_views):
+    transform = DataAugmentationForAttInMVS()
     images_list = []
     depth_maps = []
     size = len(data_path)
@@ -146,6 +148,7 @@ def load_dataset(data_path, multi_views):
         images = []
         for view in range(multi_views):
             image = cv2.imread(data_path[i][view])
+            image = transform(image)
             images.append(image)
         depth_map = load_pfm(open(data_path[i][multi_views], 'rb'))
 

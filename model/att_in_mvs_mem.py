@@ -6,6 +6,7 @@ from functools import partial
 from einops import rearrange
 import torch
 import torch.nn.functional as F
+import numpy as np
 
 from model.base_component import get_sinusoid_encoding_table
 
@@ -192,6 +193,7 @@ class AIM(nn.Module):
 
         self.image_size = image_size
         self.patch_size = patch_size
+        self.out_sizes = []  # Log the size of each layer's output
 
         # Input embedding
         self.patch_embed = PatchEmbed(image_size, patch_size, input_channels, embed_dim)
@@ -229,16 +231,23 @@ class AIM(nn.Module):
     def forward_features(self, ref, source):
         # Image embedding
         query = self.patch_embed(ref)
+        self.out_sizes.append(np.array(query.size()))
         value = self.patch_embed(source)
+        self.out_sizes.append(np.array(value.size()))
         # Position embedding
         x = query + self.position_embed
+        self.out_sizes.append(np.array(x.size()))
         v = value + self.position_embed
+        self.out_sizes.append(np.array(v.size()))
         x_vis, v_vis = x, v
 
         for blk in self.blocks:
             x_vis, v_vis = blk(x_vis, v_vis)
+            self.out_sizes.append(np.array(x_vis.size()))
+            self.out_sizes.append(np.array(v_vis.size()))
 
         x_vis = self.norm(x_vis)
+        self.out_sizes.append(np.array(x_vis.size()))
 
         return x_vis
 
@@ -259,6 +268,18 @@ class AIM(nn.Module):
         x = rearrange(x, 'b (h w) (p1 p2) -> b (h p1) (w p2)',
                       p1=self.patch_size[0] // 4, p2=self.patch_size[1] // 4,
                       h=self.image_size[0] // self.patch_size[0], w=self.image_size[1] // self.patch_size[1])
+
+        for i in range(len(self.out_sizes)):
+            s = self.out_sizes[i]
+            nums = np.prod(np.array(s))
+            print('Model {}: intermedite variables: {:3f} M (without backward)'
+                  .format(self._get_name(), nums * 4 / 1000 / 1000))
+
+        # print('Model {}: intermedite variables: {:3f} M (without backward)'
+        #       .format(self._get_name(), total_num * 4 / 1000 / 1000))
+        # print('Model {}: intermedite variables: {:3f} M (with backward)'
+        #       .format(self._get_name(), total_num * 4 * 2 / 1000 / 1000))
+
         return x
 
 
