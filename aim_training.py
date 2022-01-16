@@ -7,6 +7,7 @@ import datetime
 import torch.backends.cudnn as cudnn
 import torch.utils.data
 import model.att_in_mvs
+# import model.att_in_mvs_mem
 import utils
 import numpy as np
 from timm.models import create_model
@@ -16,6 +17,7 @@ from torch import nn
 from einops import rearrange
 from pathlib import Path
 from typing import Iterable
+from torchstat import stat
 
 
 def get_args():
@@ -32,7 +34,7 @@ def get_args():
 
     # Dataset parameters
     # parser.add_argument('--data_path', default='F:\\training_data\MVS\dtu_training', type=str, help='dataset path')
-    parser.add_argument('--data_path', default='/home/gongshuai/pycharmProject/training_data/dtu_training', type=str, help='dataset path')
+    parser.add_argument('--data_path', default='/training_data/dtu_training', type=str, help='dataset path')
     parser.add_argument('--imagenet_default_mean_and_std', default=True, action='store_true')
 
     # Optimizer parameters
@@ -227,8 +229,16 @@ def train(args):
     print('Training time {}'.format(total_time_str))
 
 
+# test
+def compute_mem(args):
+    # Model
+    model = get_model(args)
+    stat(model, (3, 512, 640))
+
+
 if __name__ == '__main__':
     opts = get_args()
     if opts.output_dir:
         Path(opts.output_dir).mkdir(parents=True, exist_ok=True)
     train(opts)
+    # compute_mem(opts)

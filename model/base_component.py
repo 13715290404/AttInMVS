@@ -3,6 +3,7 @@ import numpy as np
 import json
 from torch import optim as optim
 from torch._six import inf
+from torchvision import transforms
 
 from timm.optim.adafactor import Adafactor
 from timm.optim.adahessian import Adahessian
@@ -234,3 +235,19 @@ class NativeScalerWithGradNormCount:
 
     def load_state_dict(self, state_dict):
         self._scaler.load_state_dict(state_dict)
+
+
+class DataAugmentationForAttInMVS:
+    def __init__(self):
+        self.transform = transforms.Compose([
+            transforms.Normalize(mean=torch.tensor(1.), std=torch.tensor(0.))
+        ])
+
+    def __call__(self, inputs):
+        return self.transform(inputs)
+
+    def __repr__(self):
+        repr_str = '(DataAugmentationForAttInMVS, \n'
+        repr_str += '  transform = %s, \n' % str(self.transform)
+        repr_str += ')'
+        return repr_str
